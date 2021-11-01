@@ -27,17 +27,6 @@ public class Nodo {
         padre=null;
         
         
-    public void agregar(){
-    
-    
-    
-    }
-       
-        
-       
-        
-    
-        
-    }
+   
     
 }
