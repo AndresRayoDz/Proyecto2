@@ -5,76 +5,51 @@
  */
 package com.mycompany.proyect2;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Familia Rayo
  */
 public class Servidor {
-    
-    
-    public static void main(String[] args){
-        ServerSocket servidorSocket=new ServerSocket(8090);
-    
-    
-    }
-    
-    
-    
-    private ServerSocket servidorSocket;
-    public Servidor(ServerSocket servidorSocket){
-        this.servidorSocket=servidorSocket;
+      public static void main(String args[]) throws IOException{
+          
+          
+        ServerSocket servidorSocket=null;
+        Socket socketCliente=null;
+        BufferedReader entrada=null;
+        PrintWriter salida=null;
+        System.out.println("hola bienvenido");
         
-    }
-    public void startServer() throws IOException{
-        try {
         
-            while(!servidorSocket.isClosed()){
-               Socket socketServidor= servidorSocket.accept();//funciona como bloqueo, el programa se detiene hasta que un cliente se conecte
-                System.out.println("a new client is conect")
-                ControladorCliente controlCliente=new ControladorCliente(socketServidor);
-                Thread thread=new Thread(controlCliente);
-                thread.start();
+          try {
+              servidorSocket=new ServerSocket(8010);
+         
+           while(true){
             
-            
-            
-            }
-        
-        }catch(IOException e){
-        
-        
-        }
-    }
-    public void apagarServidor(){
-        try{
-            
-            if(servidorSocket !=null){
-                servidorSocket.close();          
-            }
-        
-        
-        
-        }catch(IOException e){
-        e.printStackTrece();
-        }
-    
+                socketCliente=servidorSocket.accept();
+                entrada=new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
+                salida=new PrintWriter(new BufferedWriter(new OutputStreamWriter(socketCliente.getOutputStream())),true);
+                String cad=entrada.readLine();
+                System.out.println(cad);
+                
+           }
+            } catch (IOException ex) {
+                Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+              }
+        salida.close();
+        entrada.close();
+        servidorSocket.close();
+        socketCliente.close();
     }
     
-    
-    
-    
-    
-    
-    
-    }
-    
-    
-    
-    
-    
-    
-       
-
+}
